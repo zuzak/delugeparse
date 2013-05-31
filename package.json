@@ -1,0 +1,12 @@
+{
+    "name": "torrentinfo",
+    "dependencies": {
+        "express": "*",
+        "jade": "*",
+        "underscore": "*",
+        "request": "*"
+    },
+    "config": {
+        "port": "11371"
+    }
+}
