@@ -6,52 +6,81 @@ function update(){
     $.get("status", function(json){
         var data = JSON.parse(json), longstr = "";
         $.each(data, function(index, torrent){
-            var str = '<div class="box"><span class="status activity ';
-            if(torrent["traffic"]){ str += "inverse ";}
-            str += torrent["status"] + '">' + torrent["status"];
-            str += "</span>";
-            str += "<h3>" + clearWord(torrent.name) + "</h3>";
+            var box = ".box#" + torrent.ID;
+            if($(box).length == 0){
+                var str = '<div class="box" id="' + torrent.ID + '">';
+                str += '<span class="status activity"></span><h3>';
+                str += '</h3><div class="progress"><div class="progress';
+                str += '-inner"></div><span></span></div><span class="';
+                str += 'status ratio"></span><span class="status quality">';
+                str += '</span><span class="info"><span class="peers"></span>';
+                str += '<span class="stalled"></span></span>';
+                str += '<a href="' + torrent.name;
+                str += '" class="status dl">Download</a><div class="imdb"></div></div>';
+                $('#boxen').append(str);
+
+                $.get("imdb/" + clearWord(torrent.name), function(imdbjson){
+                    var imdb = JSON.parse(imdbjson)[0];
+                    if(imdb.rating){
+                    var subtitle = "Starring " + imdb.actors[0];
+                    subtitle += " · Directed by " + imdb.directors[0];
+                    subtitle += " · " + imdb.rating + " stars";
+                    $(box + " .imdb").text(subtitle).fadeIn();
+                    }
+                });
+
+            }
+            $(box+" h3").text(clearWord(torrent.name));
+            if(torrent["traffic"]){
+                $(box+" .activity").addClass("inverse");
+            } else {
+                $(box+" .activity").removeClass("inverse");
+            }
+            $(box+".activity").addClass(torrent["status"]);
+            $(box+" .activity").text(torrent["status"]);
+            $(box+" .activity").removeClass("seeding downloading paused active queued checking error");
+            $(box+" .activity").addClass(torrent["status"]);
             if(!torrent.progress){torrent.progress="100%";}
-            str += '<div class="progress"><div class="progress-inner" style="width:';
-            str += torrent.progress + '">' + torrent["size-downloaded"] + '</div><span>';
-            str += torrent["size-total"] + '</span></div>';
-            str += '<span class="status ratio';
+            $(box+" .progress-inner").css("width",torrent.progress);
+            $(box+" .progress-inner").text(torrent["size-downloaded"]);
+            $(box+" .progress span").text(torrent["size-total"]);
             if(torrent.ratio <= 1){
-                str += " inverse";
+                $(box + " .ratio").addClass("inverse");
+            } else {
+                $(box + " .ratio").removeClass("inverse");
             }
             if(torrent.ratio == "-1.000"){
                 torrent.ratio = "&nbsp;ø&nbsp;";
             } else {
                 torrent.ratio = parseFloat(torrent.ratio).toFixed(2);
             }
-            str += '">' + torrent.ratio + '</span>';
+            $(box + " .ratio").html(torrent.ratio);
             if(torrent.quality){
-                str += '<span class="status quality">' + torrent.quality + '</span>';
+                $(box + ' .quality').text(torrent.quality);
+            } else {
+                $(box + ' .quality').hide();
             }
             if(torrent["seeders-total"]!=undefined){
-            str += '<span class="info">' + torrent["seeders-connected"] + '/';
-            str += torrent["seeders-total"] + " seeders · " + torrent["peers-connected"];
-            str += "/" + torrent["peers-total"] + " peers";
-            str += "</span>";
-
+                var peers = torrent["seeders-connected"] + " / " + torrent["seeders-total"];
+                peers += " seeders · " + torrent["peers-connected"] + " / " + torrent["peers-total"];
+                peers += " leechers"; 
+                $(box + ' .peers').text(peers);
+            }
+            var stall = "";
             if(torrent["seeders-total"] == 0 && torrent["status"] == "downloading"){
                 if(torrent["peers-total"]==1){
-                    str+=' <span class="info stalled">(dead?)</span>';
+                    stall = "stalled!";
                 } else {
-                str += ' <span class="info stalled">(stalled)</span>';
+                    stall = "dead?";
                 }
             }
-            }
+            $(box + " .stalled").text(stall)
 
             if(torrent["size-total"] == torrent["size-downloaded"]){
-                str += '<a class="status dl" href="http://ranna.chippy.ch/' + encodeURI(torrent.name) + '">Download</a>';
+                $(box + " .dl").fadeIn();
             };
             
-            str += "</div>";
-            longstr += str;
         });
-        $('#boxen').html(longstr + '<span class="reload">.</span>');
-        setInterval(function(){$('.reload').hide();},1000);
         $('.loading').hide(function(){
             $('#boxen').fadeIn();
         });

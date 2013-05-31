@@ -90,7 +90,12 @@ app.get("/status", function(req, res){
 });
 app.get("/imdb/:film", function(req, res){
     request.get("http://imdbapi.org/?q=" + req.params.film, function(error, response, body){
+        try{
         var data = JSON.parse(body);
+        } catch(e) {
+            var data ="";
+        }
+
         res.render("json",{data:data});
     });
 });

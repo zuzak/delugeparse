@@ -157,3 +157,6 @@ span.info {
     color: #eee;
     padding-left:30px;
 }
+.imdb { 
+    display:none;
+}
