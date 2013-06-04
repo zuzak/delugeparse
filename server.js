@@ -3,6 +3,7 @@ var express = require("express"),
     config = require("./package.json").config,
     app = express(),
     exec = require("child_process").exec,
+    fs = require("fs"),
     request = require("request");
 
 app.set("views",__dirname+"/views");
@@ -21,8 +22,30 @@ app.listen(config.port);
 app.get("/", function(req,res){
     res.render("index");
 });
+app.get("/raw", function(req,res){
+    exec("deluge-console info", function(err, stdout, stderr){
+        res.render("raw", {err:err,stdout:stdout,stderr:stderr});
+    });
+});
+app.get("/action/:id/:action", function(req, res){
+    var whitelist = ["resume","pause"];
+    var id = req.params.id;
+    var action = req.params.action;
+    if(_.indexOf(whitelist,action) != "-1"){
+        if(id.replace(/[0-9a-f]{40}/,'')==""){
+            exec("deluge-console resume \"" + id + '"', function(err, stdout, stderr){
+                res.render("raw", {err:err,stdout:stdout,stderr:stderr});
+            });
+        } else {
+            res.send(400,"Invalid ID");
+        }
+    } else {
+        res.send(400,"Invalid action");
+    }
+});
 app.get("/status", function(req, res){
     exec("deluge-console info", function(err, stdout, stderr) {
+        stdout = stdout + "\n "; // dirty hack to make the last one display
         var data = [], working = {}, pointer = -1;
         stdout = stdout.split("\n");
         for(var curr in stdout){
@@ -38,7 +61,9 @@ app.get("/status", function(req, res){
                             working["quality"] = "1080p";
                         } else if (~subline.indexOf("720")){
                             working["quality"] = "720p";
-                       }
+                        } else if (~subline.indexOf("iso")){
+                            working["quality"] = ".iso";
+                        }
                         working["name"] = working["Name"];
                         delete working["Name"];
                         break;
@@ -51,7 +76,9 @@ app.get("/status", function(req, res){
                         break;
                     case "Seed time":
                         working["time-seeding"] = subline.substr(0,subline.indexOf(" Active "));
+                        working["days-seeding"] = subline.split(" ")[0]; 
                         working["time-active"] = subline.substr(subline.indexOf(" Active ") + 8);
+                        working["days-active"] = working["time-active"].split(" ")[0];
                         delete working["Seed time"];
                         break;
                     case "Progress":
@@ -77,6 +104,11 @@ app.get("/status", function(req, res){
                         }
                         delete working["State"];
                         break;
+                    case "Tracker status":
+                        var split = subline.split(" ");
+                        working["tracker"] = split.shift();
+                        working["tracker-status"] = split.join(" ");
+                        delete working["Tracker status"];
 
                 }
             } else {
@@ -97,5 +129,17 @@ app.get("/imdb/:film", function(req, res){
         }
 
         res.render("json",{data:data});
+    });
+});
+app.get("/rxb", function(req, res){
+    res.render("rxb");
+});
+app.get("/rxb/data", function(req, res){
+    fs.readFile('/sys/class/net/eth0/statistics/rx_bytes','utf8', function(err,rxb){
+        fs.readFile('/sys/class/net/eth0/statistics/tx_bytes', 'utf8', function(err2, txb){
+            console.log(rxb);
+            var data = {rxb:rxb,txb:txb};
+            res.render("json",{data:data});
+        });
     });
 });

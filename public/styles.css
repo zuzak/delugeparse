@@ -4,6 +4,7 @@ body {
     color:#bbb;
     background-color:#222;
     font-family:'Open Sans',arial,sans-serif;
+    font-size:16px;
 }
 h1 {
     font-size:300%;
@@ -11,14 +12,11 @@ h1 {
     float:left;
 }
 .container {
-    border-left:1px solid;
-    border-right:1px solid;
-    border-color:#555;
     margin:auto;
     padding:5px;
-    -webkit-columns:500px;
-    -moz-columns:500px;
-    columns:500px;
+    -moz-columns:480px;
+/*    -webkit-columns:480px; */
+    columns:480px;
 }
 .boxen {
     display:none;
@@ -30,12 +28,22 @@ h1 {
     height:54px;
     border-radius:5px;
     margin-bottom:10px;
-    overflow:auto;
+    overflow:hidden;
 }
-.box h3 {
+h3 {
     font-weight:bold;
     display:inline-block;
     font-size:110%;
+    float:left;
+}
+.fullname {
+    font-style:italic;
+    font-size:80%;
+    color:gray;
+    white-space:nowrap;
+    overflow:hidden;
+    display:inline-block;
+    float:left;
 }
 .activity {
     float:right;
@@ -106,7 +114,7 @@ h1 {
     height:1em;
     margin-top:5px;
     margin-bottom:5px;
-    clear:right;
+    clear:both;
 }
 .progress-inner {
     background-color:#999;
@@ -121,6 +129,7 @@ span.ratio {
     float:right;
     background-color:#EBE587;
     color:#646139;
+    min-width:21px;
 }
 span.ratio.inverse {
     background-color:#646139;
@@ -160,3 +169,58 @@ span.info {
 .imdb { 
     display:none;
 }
+.trackseed {
+    display:none;
+    float:right;
+}
+.removed {
+    color:white;
+    background-color:black;
+}
+.removedtorrent {
+    background-color: #222;
+    color:#444;
+    border:1px solid #333;
+    height:52px;
+}
+.removedtorrent .progress, .removedtorrent .progress-inner {
+    color:transparent;
+    background-color:transparent;
+}
+.removedtorrent .dl {
+    display:none;
+}
+.removedtorrent .quality {
+    background-color:#2E1F37;
+    color:#483157;
+}
+.removedtorrent .ratio, .removedtorrent .ratio.inverse {
+    background-color:#3F3D24;
+    color:#6B673D;
+}
+.removedtorrent .trackseed {
+    display:none;
+}
+.removedtorrent .stalled {
+    display:none;
+}
+pre {
+    font-family:monospace;
+    padding:10px;
+    margin:20px;
+    border:1px solid #444;
+}
+h2 {
+    text-align:center;
+    font-size:200%;
+}
+.resume {
+    text-decoration:inherit;
+}
+
+/* hack to try and get sensible-ish columns on chrome etc */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+     .box  { width:500px; margin:5px; float:left; }
+     .container { margin:auto; overflow:auto}
+ }
+  

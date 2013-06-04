@@ -1,0 +1,50 @@
+html
+  head
+    title RXB
+    meta(charset="utf-8")
+    script(src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js")
+    script(src="//rawgithub.com/davatron5000/FitText.js/master/jquery.fittext.js")
+    script.
+      var cap = 5, base=2;
+      $(document).ready(function(){
+        setInterval(function(){
+          $.get("rxb/data",function(json){
+            if(base==2){var mult =Math.pow(2,30);}else{mult = Math.pow(10,9); }
+            console.log(mult);
+            var data = JSON.parse(json);
+            var rxb = data.rxb/mult;
+            rxb = rxb.toFixed(3);
+            rxb = rxb.replace(/\./,"<span class=\"gray\">.</span>");
+
+            var txb = data.txb/mult;
+            txb = txb.toFixed(3);
+            txb = txb.replace(/\./,"<span class=\"gray\">.</span>");
+            $("#rxb").html(rxb);
+            $("#txb").html(txb);
+        //  $('#bwd').html(((data.txb/(cap*1099511627776))*100).toFixed(4));
+
+          });
+        },100);
+          $(".unit").click(function(){
+            if(base==2){
+              $(".unit").text(" GB");
+              base=10;
+            } else {
+              base=2;
+              $(".unit").text("GiB");
+            }
+          });
+        $("body").fitText();
+      });
+    style.
+       html,body{
+         font-family:'Share Tech Mono',monospace;
+         text-align:right;
+         color:#bbb;background-color:#333;margin:0;padding:10%;overflow:hidden;}
+       .gray,p {color:#555;font-size:50%} 
+       .unit{cursor:pointer;}
+  body
+    div <span class="gray">RX</span> <span id="rxb">000.000</span> <span class="gray unit">GiB</span>
+    div <span class="gray">TX</span> <span id="txb">000.000</span> <span class="gray unit">GiB</span>
+    //div.unit <span class="unit">Monthly Bandwidth</span> <span id="bwd">000.000</span> <span class="unit">%&nbsp;&nbsp;</span>
+      
