@@ -1,0 +1,47 @@
+!!!5
+head
+  title Error #{code}
+  script(src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js")
+  script(src="jquery.fittext.js")
+  link(href="//fonts.googleapis.com/css?family=Roboto+Slab",rel="stylesheet",type="text/css")
+  meta(charset="utf8")
+  style
+    h1,p{
+      width:100%;
+      text-align:center;
+      margin:0;
+      padding:0;
+      font-family:'Roboto Slab',serif;
+    }
+    html,body{
+      margin:0;
+      padding:0;
+      overflow:hidden;
+    }
+  script
+    function f(){
+      $('body').css({
+        "color":'#'+Math.floor(Math.random()*16777215).toString(16),
+        "background-color":"\u0023"+Math.floor(Math.random()*16777215).toString(16)
+      });
+      $('h1').css({
+        "color":'#'+Math.floor(Math.random()*16777215).toString(16)
+      });
+      setTimeout(f,500);
+    }
+    $(document).ready(function(){
+      $("h1").fitText(0.25);
+      $("audio").on("play", function(){
+        f();
+        setTimeout(end,57000);
+      });
+    });
+    function end(){
+      $("h1").html("Error 404<br>Not Found").fitText(0.6);
+    }
+body
+  h1 #{code}
+  audio(autoplay)
+    source(src="wag.wav",type="audio/wav")
+    source(src="wag.mp3",type="audio/mpeg")
+

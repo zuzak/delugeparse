@@ -4,23 +4,57 @@ var express = require("express"),
     app = express(),
     exec = require("child_process").exec,
     fs = require("fs"),
-    request = require("request");
+    request = require("request"),
+    read = require("fs").readFileSync,
+    write = require("fs").writeFileSync,
+    crypto = require("crypto");
 
+// setting up jade
 app.set("views",__dirname+"/views");
 app.set("view engine","jade");
 app.use(express.static(__dirname+"/public"));
 app.use(express.basicAuth('public','public'));
 
+app.listen(config.port,function(){
+    console.log("Listening on port " + config.port);
+});
+
+// govern output
 if(config.debug){
     app.use(express.logger("dev"));
 }
 
-app.listen(config.port);
 
 ////////////
 
-app.get("/", function(req,res){
-    res.render("index");
+app.get("/", function(req, res){
+    res.render("unauth");
+});
+app.get("/auth/keygen", function(req,res){
+    var randstr = Math.random().toString(36).substring(2,7);
+    res.render("json",{data:{key:randstr}});
+});
+app.get("/ircsim/:nick/:key", function(req,res){
+    var nick = req.params.nick;
+    var key = req.params.key;
+
+    var currentKeys = JSON.parse(read("./data//authkeys.json","utf-8"));
+    currentKeys[key] = nick;
+    write("./data/authkeys.json",JSON.stringify(currentKeys,null,'    '));
+    res.render("json",{data:currentKeys});
+});
+app.get("/auth/accepted/:key", function(req,res){
+    var currentKeys = JSON.parse(read("./data/authkeys.json","utf-8"));
+    if(currentKeys[req.params.key]){
+        var output = {"key": req.params.key, "username": currentKeys[req.params.key]};
+        output["hash"] = crypto.createHash('sha1').update(config.secret + req.params.key).digest("hex")
+        res.render("json",{data:output});
+    } else {
+        res.render("json",{data:"Not found"});
+    }
+});
+app.get("/overview", function(req,res){
+    res.render("overview");
 });
 app.get("/raw", function(req,res){
     exec("deluge-console info", function(err, stdout, stderr){
@@ -142,4 +176,7 @@ app.get("/rxb/data", function(req, res){
             res.render("json",{data:data});
         });
     });
+});
+app.use(function(req, res) {
+    res.status(404).render('error', {code:404});
 });

@@ -1,0 +1,96 @@
+body {
+    margin:20%;
+}
+h1 {
+    float:none;
+}
+.container {
+    margin:10px;
+    display:inline-block;
+    padding:5px;
+}
+input {
+    display:block;
+    margin:10px;
+}
+ul {
+    width:100%;
+    padding:5px;
+    margin-top:20px;
+}
+li {
+    display:inline-block;
+    width:33.333%;
+    text-align:center;
+    padding-top:10px;
+    padding-bottom:10px;
+    background-color:#333;
+    cursor:pointer;
+}
+li:hover {
+    background-color:#444;
+}
+.disabled {
+    color:#555;
+    text-decoration:line-through;
+}
+#register,#recover {
+    display:none;
+}
+.ircauthstatus {
+    color:#333;
+    text-align:right;
+    font-size:80%;
+}
+.back {
+    color:#333;
+    float:left;
+    display:inline;
+    padding:5px;
+    cursor:pointer;
+    display:none !important; /* "disable" for now */
+}
+.back:hover {
+    background-color:#555;
+}
+#error {
+    background-color:#111;
+    padding:10px;
+    text-align:center;
+    color:#990000;
+    border:1px solid #440000;
+    margin-bottom:10px;
+    display:none;
+}
+#error p {
+    margin:5px;
+}
+.error {
+    color:#990000;
+}
+.accepted {
+    color:#1DAF15;
+}
+#regoutro {
+    display:none;
+}
+#regoutro p {
+    margin-bottom:5px;
+}
+input {
+    font-family:inherit;
+    font-size:100%;
+    display:inline-block;
+    color:#222;
+    background-color:#bbb;
+    border:none;
+    padding-left:5px;
+    padding-right:5px;
+    width:40%;
+}
+form p {
+    display:inline-block;
+}
+.username {
+    font-weight:bold;
+}

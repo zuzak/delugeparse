@@ -1,0 +1,44 @@
+extends skeleton
+block append styles
+  link(rel="stylesheet", href="unauth.css")
+block append scripts
+  script(src="unauth.js")
+block content
+  h1 Welcome
+  div.container 
+    div#error
+      p .
+        Something went wrong.
+      p .
+        Please try again later.
+    div#intro
+      p .
+        You must authenticate to continue. 
+      ul#links
+        li.disabled Login
+        li#reglink Register
+        li.disabled Recover
+    div#register
+      div#regintro
+        p Send thing on IRC:
+        pre /msg ranna REGISTER abcdef
+        p.back Back
+        p.ircauthstatus .
+          Waiting…
+      div#regoutro
+        p.accepted You are now authenticated as <span class="username">m1k3y</span>.
+        p Please create an account in order to continue.
+        p Enter your new username and password below:
+        form
+          input#username(type="input",placeholder="Username")
+          input#password(type="password",placeholder="Password")
+        p The account will be permanently associated with your nickname.
+    div#recover
+      div#recintro
+        p Send this on IRC:
+        pre /msg ranna RECOVER abcdef
+        p.back Back
+        p.ircauthstatus .
+          Waiting…
+      
+

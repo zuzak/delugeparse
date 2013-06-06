@@ -27,7 +27,7 @@ html
         },100);
           $(".unit").click(function(){
             if(base==2){
-              $(".unit").text(" GB");
+              $(".unit").text("GB\u00A0");
               base=10;
             } else {
               base=2;
@@ -44,7 +44,7 @@ html
        .gray,p {color:#555;font-size:50%} 
        .unit{cursor:pointer;}
   body
-    div <span class="gray">RX</span> <span id="rxb">000.000</span> <span class="gray unit">GiB</span>
-    div <span class="gray">TX</span> <span id="txb">000.000</span> <span class="gray unit">GiB</span>
+    div <span class="gray">RX</span> <span id="rxb">---.---</span> <span class="gray unit">GiB</span>
+    div <span class="gray">TX</span> <span id="txb">---.---</span> <span class="gray unit">GiB</span>
     //div.unit <span class="unit">Monthly Bandwidth</span> <span id="bwd">000.000</span> <span class="unit">%&nbsp;&nbsp;</span>
       

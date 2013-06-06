@@ -179,7 +179,7 @@ function update(){
 function clearWord(str){
  //   str = str.replace(/\d{4}(?!p).*/,'');
     str = str.replace(/\d{4}.*/,'');
-    str = str.replace(/\(|\)|\.|\[|\]|\-|mkv/g,' ');
+    str = str.replace(/\(|\)|\.|\[|\]|\-|_|mkv/g,' ');
 
 
     // https://gist.github.com/mattwiebe/1005915
@@ -189,4 +189,3 @@ function clearWord(str){
 
     return str;
 }
-

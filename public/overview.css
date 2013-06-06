@@ -1,0 +1,197 @@
+.container {
+    margin:auto;
+    padding:5px;
+    -moz-columns:480px;
+/*    -webkit-columns:480px; */
+    columns:480px;
+}
+.boxen {
+    display:none;
+}
+.box {
+    background-color:#3B3B3B;
+    padding:10px;
+    font-size:70%;
+    height:54px;
+    border-radius:5px;
+    margin-bottom:10px;
+    overflow:hidden;
+}
+.fullname {
+    font-style:italic;
+    font-size:80%;
+    color:gray;
+    white-space:nowrap;
+    overflow:hidden;
+    display:inline-block;
+    float:left;
+}
+.activity {
+    float:right;
+    margin-bottom:5px;
+}
+.status {
+    display:inline-block;
+    padding:2px 5px 2px 5px;
+    border-radius:2px;
+    text-align:center;
+    float:right;
+    margin-left:2px;
+}
+.seeding {
+    color:#87ceeb;
+    background-color:#304c5b;
+}
+.seeding.inverse {
+    color:#304c5b;
+    background-color:#87ceeb;
+}
+.downloading {
+    background-color:#3A5B30;
+    color:#9FEB87;
+}
+.downloading.inverse {
+    color:#3a5b30;
+    background-color:#9feb87;
+}
+.paused {
+    background-color:#832E00;
+    color:#EBAA87;
+}
+.paused.inverse {
+    background-color:#ebaa87;
+    color:#832e00;
+}
+.queued {
+    background-color:#002B29;
+    color:#008371;
+}
+.queued.inverse {
+    background-color:#008371;
+    color:#002b29;
+}
+.error {
+    background-color:#ff0000;
+    color:#EB8787;
+}
+.error.inverse {
+    background-color:#eb8787;
+    color:#ff0000;
+}
+.checking {
+    background-color:#37001D;
+    color:#9B0053;
+}
+.checking.inverse {
+    background-color:#9b0053;
+    color:#37001d;
+}
+.progress {
+    background-color:#666;
+    display:block;
+    border-radius:2px;
+    text-align:right;
+    overflow:hidden;
+    height:1em;
+    margin-top:5px;
+    margin-bottom:5px;
+    clear:both;
+}
+.progress-inner {
+    background-color:#999;
+    color:#444;
+    display:block;
+    float:left;
+}
+.progress span {
+    padding-right:5px;
+}
+span.ratio {
+    float:right;
+    background-color:#EBE587;
+    color:#646139;
+    min-width:21px;
+}
+span.ratio.inverse {
+    background-color:#646139;
+    color:#EBE587;
+}
+span.quality {
+    background-color:#624073;
+    color:#CC87EB;
+    float:right;
+}
+span.info {
+    text-align:center;
+    margin:auto;
+    display:inline-block;
+}
+.loading {
+    font-size:200%;
+    text-align:center;
+    color:#666;
+    margin:20%;
+}
+.reload {
+    text-align:right;
+    color:green;
+}
+.dl {
+    color:inherit;
+    text-decoration:none;
+    margin-right:20px;
+    border:1px solid #2f2f2f;
+
+}
+.stalled {
+    color: #eee;
+    padding-left:30px;
+}
+.imdb { 
+    display:none;
+}
+.trackseed {
+    display:none;
+    float:right;
+}
+.removed {
+    color:white;
+    background-color:black;
+}
+.removedtorrent {
+    background-color: #222;
+    color:#444;
+    border:1px solid #333;
+    height:52px;
+}
+.removedtorrent .progress, .removedtorrent .progress-inner {
+    color:transparent;
+    background-color:transparent;
+}
+.removedtorrent .dl {
+    display:none;
+}
+.removedtorrent .quality {
+    background-color:#2E1F37;
+    color:#483157;
+}
+.removedtorrent .ratio, .removedtorrent .ratio.inverse {
+    background-color:#3F3D24;
+    color:#6B673D;
+}
+.removedtorrent .trackseed {
+    display:none;
+}
+.removedtorrent .stalled {
+    display:none;
+}
+.resume {
+    text-decoration:inherit;
+}
+
+/* hack to try and get sensible-ish columns on chrome etc */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+     .box  { width:500px; margin:5px; float:left; }
+     .container { margin:auto; overflow:auto}
+ }
+  

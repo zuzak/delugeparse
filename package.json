@@ -7,6 +7,8 @@
         "request": "*"
     },
     "config": {
-        "port": "11371"
+        "port": "11371",
+        "debug": true,
+        "secret": "DbEQdGPPNHcGCifzW3yJSPTWkEbEU9kROI5VgHwR"
     }
 }
