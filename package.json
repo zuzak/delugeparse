@@ -1,13 +1,28 @@
 {
     "name": "torrentinfo",
     "dependencies": {
-        "express": "*",
+        "express": "3.2.5",
         "jade": "*",
         "underscore": "*",
-        "request": "*"
+        "request": "*",
+        "irc": "0.3.6",
+        "passport": "~0.1.17",
+        "passport-local": "~0.1.6",
+        "mongoose": "*",
+        "log-colors": "*"
     },
     "config": {
-        "port": "11371",
+        "web": {
+            "port": "11371"
+        },
+        "irc": {
+            "server": "irc.aberwiki.org",
+            "port": "6667",
+            "channels": [
+                "#zuzak"
+            ],
+            "nick": "ranna"
+        },
         "debug": true,
         "secret": "DbEQdGPPNHcGCifzW3yJSPTWkEbEU9kROI5VgHwR"
     }

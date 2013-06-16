@@ -14,35 +14,61 @@ $(document).ready(function(){
             },5000);
         });
     });
-    $("#reclink").click(function(){
-        $("#intro").slideUp(function(){
-            $("#recover").fadeIn();
-        });
+    $("#loglink").click(function(){
+        $("#intro").slideUp();
+        $("#login").fadeIn();
     });
         
     $(".back").click(function(){
-        $(".container div").hide();
+        $("#login").hide();
+        $("#register").hide();
         $("#intro").fadeIn();
     });
-});
 
-function authenticate(key){
-    $.getJSON("auth/accepted/" + key, function(acc){
-        console.log(key);
-        if(acc.username){
-            $(".ircauthstatus").text("Authenticated");
-            $(".username").text(acc.username);
-            $("input#username").val(acc.username);
-            $("#regoutro").fadeIn();
-            $("#regintro").slideUp();
-            $("input#password").focus();
-        } else {
-            setTimeout(function(){
-                authenticate(key)
-            },1000);
-        }
-    }).error(function(){
-        $(".ircauthstatus").addClass("error");
-        $(".ircauthstatus").text("Error! :(");
-    });
-}
+    function authenticate(key){
+        $.getJSON("auth/accepted/" + key, function(acc){
+            console.log(key);
+            if(acc.username){
+                $(".ircauthstatus").text("Authenticated");
+                $(".username").text(acc.username);
+                $("input#username").val(acc.username);
+                $("#regoutro").fadeIn();
+                $("#regintro").slideUp();
+                $("input#password").focus();
+
+                $('#regpassword').keyup(function(e){
+                    if(e.keyCode == 13){
+                        var len = $("#regpassword").val().length;
+                        if(len > 7){
+                            $("#regoutro").slideUp();
+                            $("#process").fadeIn();
+                            console.log($("#regusername").val());
+                            $.post("auth/register", {
+                                "username": $("#regusername").val(),
+                                "password": $("#regpassword").val(),
+                                "hash": acc.hash,
+                                "slug": key
+                            }).error(function(){
+                                $("#error").slideDown();
+                            });
+                            $("#process").slideUp();
+                            $("#login").fadeIn();
+                        } else {
+                            $("#regpassword").css("background-color","#666");
+                            setTimeout(function(){
+                                $("#regpassword").css("background-color","#bbb");
+                            },500);
+                        }
+                    }
+                });
+            } else {
+                setTimeout(function(){
+                    authenticate(key)
+                },1000);
+            }
+        }).error(function(){
+            $(".ircauthstatus").addClass("error");
+            $(".ircauthstatus").text("Error! :(");
+        });
+    }
+});

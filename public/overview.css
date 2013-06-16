@@ -30,6 +30,9 @@
     float:right;
     margin-bottom:5px;
 }
+.dead {
+    background-image:url('graystripe.png');
+}
 .status {
     display:inline-block;
     padding:2px 5px 2px 5px;

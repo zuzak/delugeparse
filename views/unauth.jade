@@ -15,30 +15,28 @@ block content
       p .
         You must authenticate to continue. 
       ul#links
-        li.disabled Login
         li#reglink Register
-        li.disabled Recover
+        li#loglink Login
     div#register
       div#regintro
-        p Send thing on IRC:
+        p Send this on IRC:
         pre /msg ranna REGISTER abcdef
-        p.back Back
-        p.ircauthstatus .
-          Waiting…
+        p.ircauthstatus Waiting...
       div#regoutro
         p.accepted You are now authenticated as <span class="username">m1k3y</span>.
         p Please create an account in order to continue.
         p Enter your new username and password below:
         form
-          input#username(type="input",placeholder="Username")
-          input#password(type="password",placeholder="Password")
+          input#regusername(type="input",placeholder="Username")
+          input#regpassword(type="password",placeholder="Password")
         p The account will be permanently associated with your nickname.
-    div#recover
-      div#recintro
-        p Send this on IRC:
-        pre /msg ranna RECOVER abcdef
-        p.back Back
-        p.ircauthstatus .
-          Waiting…
-      
+        p.warning Your connection is not currently encrypted.
+      div#process
+        p Your registration is now being processed.
+    div#login
+      p Enter your username and password to login.
+      form(action="login",method="post")
+        input#logusername(type="input",name="username",placeholder="Username")
+        input#logpassword(type="password",name="password",placeholder="Password")
+        input#submit(type="submit")
 

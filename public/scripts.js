@@ -99,6 +99,7 @@ function update(){
             }
             $(box+" .activity").removeClass("seeding removed downloading paused active queued checking error");
             $(box+" .trackseed").removeClass("seeding removed downloading paused active queued checking error");
+            $(box).removeClass("dead");
             $(box+" .activity").addClass(torrent["status"]);
             if(!torrent.progress){
                 if(torrent["size-downloaded"] == torrent["size-total"]){
@@ -159,6 +160,7 @@ function update(){
                     stall = "stalled!";
                 } else {
                     stall = "dead?";
+                    $(box).addClass("dead");
                 }
             }
             $(box + " .stalled").text(stall)
@@ -178,7 +180,7 @@ function update(){
 }
 function clearWord(str){
  //   str = str.replace(/\d{4}(?!p).*/,'');
-    str = str.replace(/\d{4}.*/,'');
+    str = str.replace(/\d{4}.*|\d{3}p/,'');
     str = str.replace(/\(|\)|\.|\[|\]|\-|_|mkv/g,' ');
 
 
