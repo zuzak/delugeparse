@@ -9,7 +9,8 @@
         "passport": "~0.1.17",
         "passport-local": "~0.1.6",
         "mongoose": "*",
-        "log-colors": "*"
+        "log-colors": "*",
+        "connect-ensure-login": "0.1.1"
     },
     "config": {
         "web": {

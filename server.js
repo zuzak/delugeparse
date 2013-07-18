@@ -12,13 +12,14 @@ var express = require("express"),
     log = require("log-colors"),
     passport = require("passport"),
     LocalStrategy = require("passport-local").Strategy,
-    mongoose = require("mongoose");
+    mongoose = require("mongoose"),
+    ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
 
 // setting up jade
 app.set("views",__dirname+"/views");
 app.set("view engine","jade");
 app.use(express.static(__dirname+"/public"));
-app.use(express.basicAuth('public','public'));
+//app.use(express.basicAuth('public','public'));
 app.use(express.bodyParser());
 
 
@@ -61,7 +62,7 @@ passport.use(new LocalStrategy(
                 return done(null, false);
             }
             var passhash = crypto.createHash('sha1').update(config.secret + password).digest("hex");
-            if(!(passhash = user.password)){
+            if(!(passhash == user.password)){
                 log.warn(username + " failed authentication (password)");
                 return done(null, false);
             }
@@ -118,7 +119,7 @@ app.get("/auth/keygen", function(req,res){
     var randstr = Math.random().toString(36).substring(2,7);
     res.render("json",{data:{key:randstr}});
 });
-app.get("/ircsim/:nick/:key", function(req,res){
+/* app.get("/ircsim/:nick/:key", function(req,res){
     var nick = req.params.nick;
     var key = req.params.key;
 
@@ -129,7 +130,7 @@ app.get("/ircsim/:nick/:key", function(req,res){
 });
 app.get("/debug/users", function(req,res){
     res.render("json",{data:JSON.parse(read("./data/users.json","utf-8"))});
-});
+}); */
 app.get("/auth/accepted/:key", function(req,res){
     var currentKeys = JSON.parse(read("./data/authkeys.json","utf-8"));
     if(currentKeys[req.params.key]){
@@ -203,19 +204,22 @@ app.post("/login",
     })
 );
 
-app.get("/overview", function(req,res){
+/* app.get("/overview", function(req,res){
     if(passport.authenticate("local")){
         res.render("overview");
     } else {
         res.render("unauth");
     }
+}); */
+app.get("/overview", ensureLoggedIn("/"), function(req, res){
+    res.render("overview");
 });
-app.get("/raw", function(req,res){
+app.get("/raw", ensureLoggedIn("/"), function(req,res){
     exec("deluge-console info", function(err, stdout, stderr){
         res.render("raw", {err:err,stdout:stdout,stderr:stderr});
     });
 });
-app.get("/action/:id/:action", function(req, res){
+app.get("/action/:id/:action", ensureLoggedIn("/"), function(req, res){
     var whitelist = ["resume","pause"];
     var id = req.params.id;
     var action = req.params.action;
@@ -223,6 +227,7 @@ app.get("/action/:id/:action", function(req, res){
         if(id.replace(/[0-9a-f]{40}/,'')==""){
             exec("deluge-console resume \"" + id + '"', function(err, stdout, stderr){
                 res.render("raw", {err:err,stdout:stdout,stderr:stderr});
+                log.info("Stopping " + id);
             });
         } else {
             res.send(400,"Invalid ID");
@@ -231,7 +236,7 @@ app.get("/action/:id/:action", function(req, res){
         res.send(400,"Invalid action");
     }
 });
-app.get("/status", function(req, res){
+app.get("/status", ensureLoggedIn("/"), function(req, res){
     exec("deluge-console info", function(err, stdout, stderr) {
         stdout = stdout + "\n "; // dirty hack to make the last one display
         var data = [], working = {}, pointer = -1;
