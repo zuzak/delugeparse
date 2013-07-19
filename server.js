@@ -73,12 +73,14 @@ passport.use(new LocalStrategy(
 ));
 
 passport.serializeUser(function(usr, done) {
+  log.info(usr.username + " (" + usr.nick + ") logged in.");
   done(null, usr.id);
 });
 
 passport.deserializeUser(function(id, done) {
   user.findById(id, function(err, usr) {
     done(err, usr);
+    log.info(usr.username + " (" + usr.nick + ") logged out.");
   });
 });
 
@@ -119,18 +121,6 @@ app.get("/auth/keygen", function(req,res){
     var randstr = Math.random().toString(36).substring(2,7);
     res.render("json",{data:{key:randstr}});
 });
-/* app.get("/ircsim/:nick/:key", function(req,res){
-    var nick = req.params.nick;
-    var key = req.params.key;
-
-    var currentKeys = JSON.parse(read("./data/authkeys.json","utf-8"));
-    currentKeys[key] = nick;
-    write("./data/authkeys.json",JSON.stringify(currentKeys,null,'    '));
-    res.render("json",{data:currentKeys});
-});
-app.get("/debug/users", function(req,res){
-    res.render("json",{data:JSON.parse(read("./data/users.json","utf-8"))});
-}); */
 app.get("/auth/accepted/:key", function(req,res){
     var currentKeys = JSON.parse(read("./data/authkeys.json","utf-8"));
     if(currentKeys[req.params.key]){
@@ -154,8 +144,6 @@ app.post("/auth/register", function(req,res){
             var nick = currentKeys[slug];
             delete currentKeys[slug];
             write("./data/authkeys.json",JSON.stringify(currentKeys,null,'    '));
-
-            var currentUsers = JSON.parse(read("./data/users.json","utf-8"));
             var passhash = crypto.createHash('sha1').update(config.secret + password).digest("hex");
             var newUser = new user({
                 nick: nick,
@@ -166,25 +154,19 @@ app.post("/auth/register", function(req,res){
                     {priv: "read"}
                 ]
             });
-            newUser.save(function (err, newUser){
-                if(err){
-                    log.error("Unable to save user " + username); // TODO: expand
-                } else {
-                    log.info("New user " + username + " created by " + nick);
-                }
-            });
-            /*
-            if(currentUsers[username]){
+            if (user.findOne('username')){
+                log.error("Registration of " + newUser.username + " attempted, but user already exists");
                 res.status(400);
-                log.warn("Registration attempted with existing user.");
-                res.send("json",{data:{error:"r01",desc:"User already exists."}});
+                res.render("json",{data:{error:"r03",desc:"Username taken."}});
             } else {
-                currentUsers[username] = newUser;
-                log.info("New user " + username + " created by " + nick);
-                write("./data/users.json",JSON.stringify(currentUsers,"utf-8"));
-                res.render("json",{data:newUser});
-            }
-            */
+                newUser.save(function (err, newUser){
+                    if(err){
+                        log.error("Unable to save user " + newUser.username); // TODO: expand
+                    } else {
+                        log.info("New user " + newUser.username + " created by " + newUser.nick);
+                    }
+                });
+            };
         } else {
             res.status(400);
             res.render("json",{data:{error:"r02",desc:"Invalid hash."}});
