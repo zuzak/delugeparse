@@ -24,6 +24,11 @@
             ],
             "nick": "ranna"
         },
+        "api": {
+            "tpb":{
+                "key":"b6a7984e4ff84b9f833c545bb8841d"
+            }
+        },
         "debug": true,
         "secret": "DbEQdGPPNHcGCifzW3yJSPTWkEbEU9kROI5VgHwR"
     }

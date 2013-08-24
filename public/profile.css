@@ -1,0 +1,63 @@
+/* profile.css */
+h2 {
+    margin-bottom:5px;
+}
+li {
+   margin:10px;
+}
+.property {
+    font-weight:bold;
+}
+h1 {
+    float:none;
+}
+.container {
+    width:80%;
+    margin:auto;
+}
+li {
+    padding:5px;
+    text-align:center;
+}
+li.allowed {
+    background-color:#3a5b30;
+    color:#9feb87;
+    border-top-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+li.denied {
+    background-color:#5B3C30;
+    color:#EC889F;
+    border-top-right-radius:5px;
+    border-bottom-left-radius:5px;
+}
+.section, .metric {
+    border:1px solid #444;
+    padding-top:5px;
+    margin-bottom:5px;
+}
+.section {
+    clear:both;
+}
+a {
+    color:inherit;
+}
+li.metric {
+    display:inline-block;
+    padding:5px;
+    margin:5px;
+    max-width:15%;
+    overflow:hidden;
+}
+ul#metrictable {
+    margin:auto;
+    text-align:center;
+}
+.caption {
+    display:block;
+    font-variant:small-caps;
+    margin-top:5px;
+}
+.value {
+    font-size:30px;
+}

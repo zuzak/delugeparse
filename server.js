@@ -43,7 +43,7 @@ var userSchema = new mongoose.Schema({
     slug: String,
     username: String,
     password: String,
-    privs: [{priv: String}]
+    privs: []
 });
 var user = mongoose.model('User',userSchema);
 
@@ -80,7 +80,7 @@ passport.serializeUser(function(usr, done) {
 passport.deserializeUser(function(id, done) {
   user.findById(id, function(err, usr) {
     done(err, usr);
-    log.info(usr.username + " (" + usr.nick + ") logged out.");
+    log.debug(usr.username + " (" + usr.nick + ") logged out.");
   });
 });
 
@@ -151,22 +151,26 @@ app.post("/auth/register", function(req,res){
                 username: username,
                 password: passhash,
                 privs: [
-                    {priv: "read"}
+                   {priv: "read"}
+                   // "read"
                 ]
             });
-            if (user.findOne('username')){
-                log.error("Registration of " + newUser.username + " attempted, but user already exists");
-                res.status(400);
-                res.render("json",{data:{error:"r03",desc:"Username taken."}});
-            } else {
-                newUser.save(function (err, newUser){
-                    if(err){
-                        log.error("Unable to save user " + newUser.username); // TODO: expand
-                    } else {
-                        log.info("New user " + newUser.username + " created by " + newUser.nick);
-                    }
-                });
-            };
+            user.findOne({'username':newUser.username}, function(err, usr){
+                if (usr){
+                    log.error("Registration of " + newUser.username + " attempted, but user already exists");
+                    res.status(400);
+                    res.render("json",{data:{error:"r03",desc:"Username taken."}});
+                } else {
+                    newUser.save(function (err, newUser){
+                        if(err){
+                            log.error("Unable to save user " + username); // TODO: expand
+                            log.error(JSON.stringify(err));
+                        } else {
+                            log.info("New user " + username + " created by " + newUser.nick);
+                        }
+                    });
+                }
+            });
         } else {
             res.status(400);
             res.render("json",{data:{error:"r02",desc:"Invalid hash."}});
@@ -180,7 +184,7 @@ app.post("/auth/register", function(req,res){
 
 app.post("/login",
     passport.authenticate("local", {
-        successRedirect: "/overview",
+        successRedirect: "/profile",
         failureRedirect: "/",
         failureFlash: true
     })
@@ -195,6 +199,11 @@ app.post("/login",
 }); */
 app.get("/overview", ensureLoggedIn("/"), function(req, res){
     res.render("overview");
+});
+app.get("/profile", ensureLoggedIn("/"), function(req, res){
+    exec("git rev-list HEAD --count",function(err,stdout,stderr){
+        res.render("profile",{user:req.user,commits:stdout});
+    });
 });
 app.get("/raw", ensureLoggedIn("/"), function(req,res){
     exec("deluge-console info", function(err, stdout, stderr){

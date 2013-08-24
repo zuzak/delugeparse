@@ -14,13 +14,14 @@ html
             var data = JSON.parse(json);
             var rxb = data.rxb/mult;
             rxb = rxb.toFixed(3);
-            rxb = rxb.replace(/\./,"<span class=\"gray\">.</span>");
+            rxbf = rxb.replace(/\./,"<span class=\"gray\">.</span>");
 
             var txb = data.txb/mult;
             txb = txb.toFixed(3);
-            txb = txb.replace(/\./,"<span class=\"gray\">.</span>");
-            $("#rxb").html(rxb);
-            $("#txb").html(txb);
+            txbf = txb.replace(/\./,"<span class=\"gray\">.</span>");
+            $("#rxb").html(rxbf);
+            $("#txb").html(txbf);
+            document.title = (rxb + "G↓ " + txb + "G↑");
         //  $('#bwd').html(((data.txb/(cap*1099511627776))*100).toFixed(4));
 
           });

@@ -1,0 +1,33 @@
+extends skeleton
+block append styles
+  link(rel="stylesheet", href="profile.css")
+block append scripts
+  script(src="profile.js")
+block content
+  h1 Profile
+  div.container 
+    div#attribs.section
+      h2 Attributes
+      ul
+        li You are logged in as <span class="property">#{user.username}</span>.
+        li You are authenticated as <span class="property">#{user.nick}</span>.
+    div#metrics
+      h2 Server Metrics
+      ul#metrictable
+        li.metric
+          span.value 500G
+          span.caption Quota
+        li.metric
+          span.value #{commits}
+          span.caption Commits
+    div#permissions.section
+      h2 Permissions
+      ul
+        li.allowed <a href="/overview">You can view torrents.</a>
+        li.allowed You can download files.
+        li.denied You cannot pause torrents.
+        li.allowed You can resume paused torrents.
+        li.denied You cannot delete torrents.
+        li.denied You cannot request torrents.
+        li.denied You cannot rsync.
+        li.allowed <a href="/rxb">You can watch creepy Cheney.</a>
