@@ -1,7 +1,7 @@
 {
     "name": "torrentinfo",
     "dependencies": {
-        "express": "3.2.5",
+        "express": "3.4.0",
         "jade": "*",
         "underscore": "*",
         "request": "*",
