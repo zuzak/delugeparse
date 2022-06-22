@@ -1,35 +1,41 @@
 {
-    "name": "torrentinfo",
-    "dependencies": {
-        "express": "3.2.5",
-        "jade": "*",
-        "underscore": "*",
-        "request": "*",
-        "irc": "0.3.6",
-        "passport": "~0.1.17",
-        "passport-local": "~0.1.6",
-        "mongoose": "*",
-        "log-colors": "*",
-        "connect-ensure-login": "0.1.1"
+  "name": "torrentinfo",
+  "dependencies": {
+    "express": "3.2.5",
+    "jade": "*",
+    "underscore": "*",
+    "request": "*",
+    "irc": "0.3.6",
+    "passport": "~0.1.17",
+    "passport-local": "~0.1.6",
+    "mongoose": "*",
+    "log-colors": "*",
+    "connect-ensure-login": "0.1.1",
+    "@snyk/protect": "latest"
+  },
+  "config": {
+    "web": {
+      "port": "11371"
     },
-    "config": {
-        "web": {
-            "port": "11371"
-        },
-        "irc": {
-            "server": "irc.aberwiki.org",
-            "port": "6667",
-            "channels": [
-                "#zuzak"
-            ],
-            "nick": "ranna"
-        },
-        "api": {
-            "tpb":{
-                "key":"b6a7984e4ff84b9f833c545bb8841d"
-            }
-        },
-        "debug": true,
-        "secret": "DbEQdGPPNHcGCifzW3yJSPTWkEbEU9kROI5VgHwR"
-    }
+    "irc": {
+      "server": "irc.aberwiki.org",
+      "port": "6667",
+      "channels": [
+        "#zuzak"
+      ],
+      "nick": "ranna"
+    },
+    "api": {
+      "tpb": {
+        "key": "b6a7984e4ff84b9f833c545bb8841d"
+      }
+    },
+    "debug": true,
+    "secret": "DbEQdGPPNHcGCifzW3yJSPTWkEbEU9kROI5VgHwR"
+  },
+  "scripts": {
+    "prepublish": "npm run snyk-protect",
+    "snyk-protect": "snyk-protect"
+  },
+  "snyk": true
 }
